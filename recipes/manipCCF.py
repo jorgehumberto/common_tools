@@ -13,7 +13,7 @@ email: jorge.martins@iastro.pt
 
 import numpy as np
 from astropy.io import fits
-from classes.classesCCFs import clsUVESCCF, clsHARPSCCF
+from classes.classesCCFs import clsUVESCCF, clsHARPSCCF, clsFits_ccf
 from math_local.mathFunctions import fnGaussianFitOLD
 from modules.InOut import fnPrintLine
 
