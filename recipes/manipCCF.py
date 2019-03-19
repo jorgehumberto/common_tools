@@ -246,7 +246,8 @@ def fnBuildStarTemplate(CCFs, nOrders = 1,Templates=None):
         Templates = sorted(CCFs.keys())
 
     # defining template CCF class
-    templateCCF = clsHARPSCCF(CCFs[Templates[0]].data)
+    # templateCCF = clsHARPSCCF(CCFs[Templates[0]].data)
+    templateCCF = clsFits_CCF(CCFs[Templates[0]].data)
     nOrders = len(templateCCF.data)
     templateCCF.wave = np.indices(np.shape(templateCCF.data))[1,:,:]
     templateCCF.ccfAmplitude, templateCCF.ccfMeanPixel, templateCCF.ccfFWHMPixels, templateCCF.ccfB = (np.empty(nOrders),np.empty(nOrders),np.empty(nOrders),np.empty(nOrders))

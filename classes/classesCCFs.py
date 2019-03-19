@@ -187,3 +187,111 @@ class clsHARPSCCF:
             self.ccfB[order] = params[3]
 
 
+class clsFits_CCF:
+    """ clsHARPSCCFLastOrder:"""
+
+    def __init__(self, data, header=None, instrument= 'ESPRESSO'):
+        # CCFFile             =     fits.open( FitsFileName )[0].copy()
+        self.data = np.array(data).copy()
+        self.indices = np.indices(np.shape(self.data))[1,:,:]
+
+
+
+        if header != None:
+
+            # if 'eso' in header['TELESCOP'].lower():
+            #     observatory = 'ESO'
+            #     starCoords = SkyCoord(ra=header['RA'], dec = header['DEC'], unit = 'deg')
+            # elif 'tng' in header['TELESCOP'].lower():
+            #     observatory = 'TNG'
+            #     starCoords = SkyCoord(ra=header['RA-RAD'], dec = header['DEC-RAD'], unit = 'rad')
+
+            self.CCFStep = header[kwFits[instrument]['ccf_step']]
+            self.CCFWaveIni = header[kwFits[instrument]['ccf_waveIni']]
+            self.RV = header[kwFits[instrument]['rv']]
+            self.FWHM = header[kwFits[instrument]['ccf_fwhm']]
+            self.ObsDate = header[kwFits[instrument]['obs_date']]  # in days!!!
+            self.ExpTime = header[kwFits[instrument]['exp_time']]  # in seconds
+            self.CCFLines = header[kwFits[instrument]['n_lines']]
+            self.BJD = header[kwFits[instrument]['bjd']]  # FOR SIMULATED DATA!!!!
+            self.MJD = header[kwFits[instrument]['mjd']] + 2400000
+            # self.obsDate = header[kwFits[instrument]['ccf_step']]
+            self.contrast = header[kwFits[instrument]['ccf_contrast']] / 100
+            self.BERV = header[kwFits[instrument]['berv']]
+            # self.SN50 = header[kwFits[instrument]['ccf_step']]
+            # self.nLines = header[kwFits[instrument]['ccf_step']]
+            self.AirMass = header[kwFits[instrument]['airmass_start']]
+
+            #
+            # self.ra = starCoords.ra.degree
+            # self.dec = starCoords.dec.degree
+
+        else:
+            self.CCFStep = 1.0
+            self.CCFWaveIni = 0.0
+            self.RV = 0.0
+            self.RVC = 0.0
+            self.RVError = 0.0
+            self.FWHM = 0.0
+            self.ObsDate = 0.0  # in days!!!
+            self.ExpTime = 0.0  # in seconds
+            self.CCFLines = 0.0
+            self.BJD = 0.0  # FOR SIMULATED DATA!!!!
+            self.contrast = (np.nanmax(self.data) - np.nanmin(self.data)) / np.nanmax(self.data)
+            self.SN50 = 0.0
+            self.nLines = 0.0
+            self.AirMass = 0.0
+
+        self.flux = np.nansum(self.data)
+        self.wave = self.indices.copy()
+        self.ccfAmplitude = 0.0
+        self.ccfMeanPixel = 0.0  # in pixels
+        self.ccfFWHMPixels = 0.0  # in pixels
+        self.ccfB = 0.0
+        self.planetRV = 0.0  # planet RV in km/s
+        self.planetRVMeanPixel = 0.0  # predicted position of planet along the array
+        self.planetRVRange = []  # planet RV in km/s
+        self.phaseFunction = 0.0
+
+    # def getPhase(self, period, t0, phaseZero = 0):
+    #     self.PlanetPhase = (self.BJD - t0) / period + phaseZero
+    #     self.PlanetPhaseFolded = self.PlanetPhase % 1
+
+    def shiftCCF(self, RV):
+        """
+        Shift the CCF of a given RV
+        """
+        self.data = np.interp(self.wave.copy() + RV, self.wave.copy(), self.data.copy())
+        # self.wave += RV
+        self.RVC += RV
+
+    def normCCF(self, Template):
+        """
+        Normalize the CCF by a template
+        """
+        self.data = np.divide(self.data.copy(), Template.copy() * self.flux.copy() / np.nansum(Template.copy()))
+        self.flux = np.nansum(self.data.copy())
+
+
+    def saveCCF(self,fileName,clobber= False):
+        fits.writeto(fileName, self.data, self.header, clobber=clobber)
+        return
+
+    def updateGaussParams(self, params, order=None):
+        '''
+        blah
+        :param params:
+        :param order:
+        :return:
+        '''
+
+        if order is None:
+            self.ccfAmplitude = params[0]
+            self.ccfMeanPixel = params[1]
+            self.ccfFWHMPixels = params[2]
+            self.ccfB = params[3]
+        else:
+            self.ccfAmplitude[order] = params[0]
+            self.ccfMeanPixel[order] = params[1]
+            self.ccfFWHMPixels[order] = params[2]
+            self.ccfB[order] = params[3]
