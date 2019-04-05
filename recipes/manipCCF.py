@@ -16,6 +16,7 @@ from astropy.io import fits
 from classes.classesCCFs import clsUVESCCF, clsHARPSCCF, clsFits_CCF
 from math_local.mathFunctions import fnGaussianFitOLD
 from modules.InOut import fnPrintLine
+import os
 
 ###############################################################################
 # Functions
@@ -51,6 +52,26 @@ def fnOpenHARPSFits2(FitsFileName):
     ccfFits = fits.open(FitsFileName)
 
     ccfClass = clsHARPSCCF(ccfFits[0].data, ccfFits[0].header)
+
+    return ccfClass
+
+
+def fnOpenFitsFile(FitsFileName, instrument='espresso'):
+    ccfFits = fits.open(FitsFileName)
+
+    instrument = ccfFits[0].header['INSTRUME'].strip().lower()
+
+    if 'espresso' in instrument.lower():
+        scienceData = ccfFits[1].data
+        scienceErr = ccfFits[2].data
+        header = ccfFits[0].header
+
+    if 'harps' in instrument.lower():
+        scienceData = ccfFits[0].data
+        scienceErr = np.empty_like(scienceData)
+        header = ccfFits[0].header
+
+    ccfClass = clsFits_CCF(scienceData, header,instrument=instrument)
 
     return ccfClass
 

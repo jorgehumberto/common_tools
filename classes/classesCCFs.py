@@ -4,6 +4,7 @@
 
 import numpy as np
 from astropy.io import fits
+import os
 #from astropy import units as u
 from astropy.coordinates import SkyCoord
 
@@ -190,12 +191,19 @@ class clsHARPSCCF:
 class clsFits_CCF:
     """ clsHARPSCCFLastOrder:"""
 
-    def __init__(self, data, header=None, instrument= 'ESPRESSO'):
+    def __init__(self, data, header=None, instrument= 'espresso'):
         # CCFFile             =     fits.open( FitsFileName )[0].copy()
         self.data = np.array(data).copy()
         self.indices = np.indices(np.shape(self.data))[1,:,:]
 
+        from ConfigParser import ConfigParser
+        config = ConfigParser()
+        config.optionxform = str
+        config.read(os.path.abspath(os.path.join(os.environ['COMMONPATH'],'keywords/kwList_fits.cfg')))
 
+        kwFits={key:val for key,val in config._sections[instrument].items()}
+
+        # print kwFits
 
         if header != None:
 
@@ -206,25 +214,18 @@ class clsFits_CCF:
             #     observatory = 'TNG'
             #     starCoords = SkyCoord(ra=header['RA-RAD'], dec = header['DEC-RAD'], unit = 'rad')
 
-            self.CCFStep = header[kwFits[instrument]['ccf_step']]
-            self.CCFWaveIni = header[kwFits[instrument]['ccf_waveIni']]
-            self.RV = header[kwFits[instrument]['rv']]
-            self.FWHM = header[kwFits[instrument]['ccf_fwhm']]
-            self.ObsDate = header[kwFits[instrument]['obs_date']]  # in days!!!
-            self.ExpTime = header[kwFits[instrument]['exp_time']]  # in seconds
-            self.CCFLines = header[kwFits[instrument]['n_lines']]
-            self.BJD = header[kwFits[instrument]['bjd']]  # FOR SIMULATED DATA!!!!
-            self.MJD = header[kwFits[instrument]['mjd']] + 2400000
-            # self.obsDate = header[kwFits[instrument]['ccf_step']]
-            self.contrast = header[kwFits[instrument]['ccf_contrast']] / 100
-            self.BERV = header[kwFits[instrument]['berv']]
-            # self.SN50 = header[kwFits[instrument]['ccf_step']]
-            # self.nLines = header[kwFits[instrument]['ccf_step']]
-            self.AirMass = header[kwFits[instrument]['airmass_start']]
-
-            #
-            # self.ra = starCoords.ra.degree
-            # self.dec = starCoords.dec.degree
+            self.CCFStep = header[kwFits['ccf_step']]
+            self.CCFWaveIni = header[kwFits['ccf_waveIni']]
+            self.RV = header[kwFits['rv']]
+            self.FWHM = header[kwFits['ccf_fwhm']]
+            self.ObsDate = header[kwFits['obs_date']]  # in days!!!
+            self.ExpTime = header[kwFits['exp_time']]  # in seconds
+            self.CCFLines = 0#header[kwFits['n_lines']]
+            self.MJD = header[kwFits['mjd']] + 2400000
+            self.BJD = header[kwFits['bjd']]  # FOR SIMULATED DATA!!!!
+            self.contrast = header[kwFits['ccf_contrast']] / 100
+            self.BERV = header[kwFits['berv']]
+            self.AirMass = header[kwFits['airmass_start']]
 
         else:
             self.CCFStep = 1.0
