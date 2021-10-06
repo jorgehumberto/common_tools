@@ -57,7 +57,7 @@ def run_bash_script(lista,settingsFile):
 ########
 # MAIN #
 ########
-def __main__():
+def main_function():
 	cfgFileName = sys.argv[1]
 	cfgFile = ConfigParser.RawConfigParser(allow_no_value=True)
 	cfgFile.optionxform = str
@@ -79,4 +79,4 @@ def __main__():
 # region --- RunTime
 
 if __name__ == '__main__':
-    __main__()
+    main_function()

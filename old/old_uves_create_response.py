@@ -104,7 +104,7 @@ def fnCreateWave2(orderHeader, order, numberOrders=1):
 #   Main
 # ======================================================================================================================
 
-def __main__():
+def main_function():
     fnPrintLine('CONFIG', 'defining "blaze" curve')
 
     filename = '/home/jmartins/WORK/DataReduction/51Peg_UVES_Martins_et_al_2015/reduced/responseFilesWithGasgano/resampled_science_redl_0000.fits'
@@ -330,4 +330,4 @@ def __main__():
 #   RunTime
 # ======================================================================================================================
 if __name__ == '__main__':
-    __main__()
+    main_function()

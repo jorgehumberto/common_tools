@@ -104,7 +104,7 @@ def fnCreateWave2(orderHeader, order, numberOrders=1):
 #   Main
 # ======================================================================================================================
 
-def __main__():
+def main_function():
     fnPrintLine('CONFIG', 'Getting file list, please wait')
 
     if settings.specType.lower() == '1d':
@@ -306,4 +306,4 @@ def __main__():
 #   RunTime
 # ======================================================================================================================
 if __name__ == '__main__':
-    __main__()
+    main_function()

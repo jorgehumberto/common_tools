@@ -73,7 +73,7 @@ starWidth = float(cfgFile.get('recovery', 'starWidth'))
 #   Main
 # ======================================================================================================================
 
-def __main__():
+def main_function():
     # region --- Define planet parameters
     planetParams = clsPlanetParametersOLD(params={param: value for param, value in cfgFile.items('orbital_params')})
     # endregion
@@ -646,4 +646,4 @@ def __main__():
 #   RunTime
 # ======================================================================================================================
 if __name__ == '__main__':
-    __main__()
+    main_function()

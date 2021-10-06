@@ -145,7 +145,7 @@ calibrations_fileList['LINE_INTMON_TABLE'] = [os.path.join(baseCalibrations_raw,
 
 
 
-def __main__():
+def main_function():
     '''
         Routine to generate esorex commands to reduce UVES data via ESO's reduction recipes:
         1) create master bias - uves_cal_bias
@@ -384,7 +384,7 @@ def __main__():
 # region --- RunTime
 
 if __name__ == '__main__':
-    __main__()
+    main_function()
 
 
 # endregion

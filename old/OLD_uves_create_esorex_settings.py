@@ -49,7 +49,7 @@ esorexCommandFilename = '{}/{}.sh'.format(WorkPath, settings.rawDataFolder)
 #   Main
 # ======================================================================================================================
 
-def __main__():
+def main_function():
     print 'Create ESOREX scripts'
 
     # Create settings for esorex
@@ -129,4 +129,4 @@ def __main__():
 #   RunTime
 # ======================================================================================================================
 if __name__ == '__main__':
-    __main__()
+    main_function()
