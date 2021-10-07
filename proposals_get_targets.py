@@ -10,7 +10,6 @@ import os
 import sys
 import numpy as np
 
-# path definition
 sys.path.append(os.path.abspath("./modules/"))
 sys.path.append(os.path.abspath("/home/jmartins/WORK/Python/ReductDRS"))
 

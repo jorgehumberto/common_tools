@@ -26,7 +26,7 @@ distancePlanetStar = 60  # in km/s
 #   Main
 # ======================================================================================================================
 
-def __main__():
+def main_function():
     dataFolderFileList = sorted(
         ['{}/{}'.format(scienceInputFolder, fileName) for fileName in os.listdir(scienceInputFolder) if
          fileName.endswith(fitsFilter)])
@@ -205,4 +205,4 @@ def __main__():
 #   RunTime
 # ======================================================================================================================
 if __name__ == '__main__':
-    __main__()
+    main_function()

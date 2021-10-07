@@ -107,7 +107,7 @@ fnPrintLine(None, '')
 #   Main
 # ======================================================================================================================
 
-def __main__():
+def main_function():
     # region -- getting file lists
     fnPrintLine('CONFIG', 'Getting file list, please wait')
 
@@ -317,4 +317,4 @@ def __main__():
 #   RunTime
 # ======================================================================================================================
 if __name__ == '__main__':
-    __main__()
+    main_function()
